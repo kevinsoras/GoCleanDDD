@@ -1,0 +1,24 @@
+run:
+  timeout: 5m
+
+linters:
+  enable:
+    - govet
+    - gofumpt
+    - goimports
+    - staticcheck
+    - errcheck
+    - revive
+    - unused
+
+issues:
+  exclude-use-default: false
+  exclude:
+    - "error return value not checked.*"
+
+linters-settings:
+  revive:
+    severity: warning
+    rules:
+      - name: blank-imports
+      - name: var-naming
