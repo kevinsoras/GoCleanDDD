@@ -1,10 +1,12 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 
 	"github.com/joho/godotenv"
+	"github.com/kevinsoras/GoCleanDDD/internal/db/postgres"
 	silicon "github.com/kevinsoras/GoCleanDDD/internal/silicon"
 	middleware "github.com/kevinsoras/GoCleanDDD/pkg/middleware"
 )
@@ -22,7 +24,15 @@ func main() {
 		middleware.Logging,
 	)
 
-	silicon.LoadRoutesSilicon(router)
+	// Create database connection
+	db, err := postgres.NewPostgresPool(context.Background())
+	if err != nil {
+		log.Fatal("Error creating database connection pool", err)
+	}
+	defer db.Close()
+	// Load routes
+	silicon := silicon.NewSiliconModule(db)
+	silicon.RegisterRoutes(router)
 
 	log.Println("Server listening on :8080")
 	server := http.Server{

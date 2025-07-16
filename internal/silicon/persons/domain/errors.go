@@ -1,1 +1,1 @@
-package persons
+package domain

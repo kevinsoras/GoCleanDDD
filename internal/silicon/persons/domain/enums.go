@@ -1,4 +1,4 @@
-package persons
+package domain
 
 type PersonType string
 
