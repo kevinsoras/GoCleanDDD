@@ -20,12 +20,12 @@ var creators = map[entity.PersonType]createFunc{
 	entity.PersonJuridica: createJuridicPerson,
 }
 
-func CreatePerson(personType entity.PersonType, input PersonInput) (*entity.Person, entity.PersonDetail, error) {
+func CreatePerson(input PersonInput) (*entity.Person, entity.PersonDetail, error) {
 	// Crear la entidad raíz Person
-	person := entity.NewCreatePerson(personType)
+	person := entity.NewCreatePerson(input.GetType())
 
 	// Buscar el factory específico (Natural o Jurídica)
-	fn, ok := creators[personType]
+	fn, ok := creators[input.GetType()]
 	if !ok {
 		return nil, nil, errors.New("person type not supported")
 	}

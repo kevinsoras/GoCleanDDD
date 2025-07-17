@@ -23,7 +23,7 @@ func (uc *CreatePersonUseCase) Execute(input dto.CreatePersonsInput) error {
 		personInput := mapper.ToPersonInput(person)
 
 		// Crear persona usando factory
-		person, detail, err := factory.CreatePerson(personInput.GetType(), personInput)
+		person, detail, err := factory.CreatePerson(personInput)
 		if err != nil {
 			return err
 		}
