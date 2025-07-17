@@ -10,7 +10,8 @@ type CreatePersonsInput struct {
 }
 
 type CreatePersonInput struct {
-	Type string `json:"type" validate:"required,oneof=NATURAL JURIDICA"`
+	ID   *string `json:"id"  validate:"omitempty"`
+	Type string  `json:"type" validate:"required,oneof=NATURAL JURIDICA"`
 
 	// NATURAL
 	TypeDocument     string `json:"typeDocument" validate:"omitempty,min=2,max=20"` // Considera oneof si hay valores fijos

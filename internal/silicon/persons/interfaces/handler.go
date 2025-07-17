@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/kevinsoras/GoCleanDDD/internal/silicon/persons/application/dto"
+	"github.com/kevinsoras/GoCleanDDD/internal/silicon/persons/application/usecase"
 	"github.com/kevinsoras/GoCleanDDD/internal/silicon/persons/domain"
 	"github.com/kevinsoras/GoCleanDDD/internal/silicon/shared/interfaces"
 	"github.com/kevinsoras/GoCleanDDD/internal/silicon/shared/utils"
@@ -19,11 +20,17 @@ func NewHandlerV1(v interfaces.Validator, r domain.PersonRepository) *HandlerV1 
 }
 
 func (h *HandlerV1) CreatePerson(w http.ResponseWriter, r *http.Request) {
-	input, ok := utils.ProcessRequest[dto.CreatePersonInput](w, r, h.validator)
+	input, ok := utils.ProcessRequest[dto.CreatePersonsInput](w, r, h.validator)
 	if !ok {
 		return
 	}
+	useCase := usecase.NewCreatePersonUseCase(h.repository)
 
+	err := useCase.Execute(*input)
+	if err != nil {
+		utils.WriteResponse(w, http.StatusInternalServerError, "Error creating person", nil, nil)
+		return
+	}
 	utils.WriteResponse(
 		w,
 		http.StatusCreated,
